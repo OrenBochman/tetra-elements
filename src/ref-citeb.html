@@ -1,0 +1,128 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+
+<dom-module id="ref-citeb">
+  <template>
+    <style>
+       :host {
+        display: inline;
+      }
+
+      a {
+        vertical-align: super;
+        font-size: smaller;
+        text-decoration-line: none;
+        background-origin: padding-box;
+        background-position-x: 0%;
+        background-position-y: 0%;
+      }
+    </style>
+    <span>
+      <a on-click="handleClick" href="#ref[[_num]]" id="cite[[_num]]">[{{_num}}]</a>
+    </span>
+    <paper-dialog id="dia_[[_num]]">
+      <h2>Edit</h2>
+      <paper-input  label="first" value="[[ref.first]]"></paper-input>
+      <paper-input  label="last" value="[[ref.last]]"></paper-input>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm autofocus>Accept</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+  <script>
+
+     __citation_counter = (typeof __citation_counter === 'undefined') ? 0 : __citation_counter;
+     _ref_list = (typeof _ref_list === 'undefined') ? [] : _ref_list;
+
+    /**
+     * `ref-cite`
+     * inline citation - requires <ref-list> element to display list
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class refCiteb extends Polymer.Element {
+
+      static get is(){return 'ref-citeb';}
+      
+      static get properties() {
+        return { _num: Number,          
+                  ref: Object                   
+        };
+      }
+
+      //Called when the element is created, but before property values are set and local DOM is initialized.
+      constructor() {
+        super();        
+
+        this._num=this.computeCount();
+        console.log(`${this.tagName}${this._num} ctor `);
+      }
+
+      //Called after the element is inserted into the document.
+      connectedCallback() {
+        super.connectedCallback();
+        console.log(`${this.tagName}-${this._num} conceted`);        
+        this.pushRef();
+
+      }
+
+      // Called after the element is removed from the document
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        console.log(`${this.tagName}-${this._num} disconceted`);        
+      }
+
+      // Called when one of the element's attributes in properties have changed.
+      // attributeChangedCallback() {
+      //   super.attributeChangedCallback();
+      //   console.log(`${this.tagName}-${this._num} attrib chanaged`);        
+      // }
+
+      handleClick() {
+
+        //$."dia_.open()
+        var dialog = "#dia_" + this._num;
+        console.log(dialog);
+
+        this.shadowRoot.querySelector(dialog).open();
+        console.log('Ow!');
+      }
+
+      ready() {
+         super.ready();
+         console.log(`${this.tagName}-${this._num} ready`);
+       //  console.log(`${this.tagName}-${this._num} first = ${this.first}`);        
+       //  console.log(`${this.tagName}-${this._num} last = ${this.last}`);        
+
+      }
+
+      computeCount() {
+        __citation_counter = __citation_counter + 1;
+        return __citation_counter;
+      }
+
+      pushRef() {
+        console.log(`${this.tagName}-${this._num} pushRef()`);        
+        console.log(`${this.tagName}-${this._num} ref = ${this.ref}`);
+        if (typeof this.ref != 'undefined'){
+        const ref = this.ref;
+        ref._num=this._num;
+        
+        _ref_list.push(ref);
+
+        console.log("pushed ref");
+        console.table(ref);
+        }
+        }
+
+      
+    }
+    window.customElements.define(refCiteb.is, refCiteb);
+  </script>
+</dom-module>

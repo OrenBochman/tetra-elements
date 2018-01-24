@@ -1,0 +1,88 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="./ref-element.html">
+
+<dom-module id="ref-list">
+    <template>
+      <style>
+        :host {
+          display: block;
+        }  
+        </style>       
+        <h1>Refrences</h1>
+        <ol>
+          <template is="dom-repeat" items="{{refList}}">
+            <script> console.table("{{item}}");</script>
+              <ref-element _num ='{{item._num}}'
+              accessDate ='{{item.accessDate}}'
+              archiveUrl ='{{item.archiveUrl}}'
+              archiveDate='{{item.archiveDate}}'
+              at      ='{{item.at}}'
+              doi     ='{{item.doi}}'
+              database='{{item.database}}'
+              first   ='{{item.first}}'            
+              first2  ='{{item.first2}}'            
+              first3  ='{{item.first3}}'            
+              isbn    ='{{item.isbn}}'
+              issn    ='{{item.issn}}'
+              issue   ='{{item.issue}}'
+              journal ='{{item.journal}}'
+              last    ='{{item.last}}'
+              last2   ='{{item.last2}}'
+              last3   ='{{item.last3}}'
+              page    ='{{item.page}}' 
+              pages   ='{{item.pages}}' 
+              publisher='{{item.publisher}}'
+              publicationPlace='{{item.publicationPlace}}'
+              quote   ='{{item.quote}}'
+              sourceDate='{{item.sourceDate}}'
+              refType ='{{item.refType}}'
+              title   ='{{item.title}}'
+              url     ='{{item.url}}'            
+              volume  ='{{item.volume}}'
+              website ='{{item.website}}'
+              year    ='{{item.year}}' >
+            </ref-element>
+        </template>
+        </ol>
+          <hr/>
+      </template>
+      <script>     
+
+      __citation_counter = (typeof __citation_counter === 'undefined') ? 0 : __citation_counter;
+      _ref_list = (typeof _ref_list === 'undefined') ? [] : _ref_list;
+       
+      /**
+       * `reference2-element`
+       * citation like in wikipedia
+       *
+       * @customElement
+       * @polymer
+       * @demo demo/index.html
+       */
+      class RefList extends Polymer.Element {
+  
+        constructor(){
+          super();
+          console.log(`${this.tagName}- ctor`);                    
+        }
+
+        ready(){
+        super.ready();
+        console.log(`${this.tagName}-${this._num} ready`); 
+        this.refList=_ref_list;
+        console.log(_ref_list.length);         
+      }
+  
+        static get is() { return 'ref-list'; }
+        static get properties() {
+          return {
+            refList: {            
+              type: Array
+            }
+          };
+        }
+      }    
+      window.customElements.define(RefList.is, RefList);
+    </script>
+  </dom-module>

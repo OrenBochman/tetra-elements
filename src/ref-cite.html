@@ -1,0 +1,209 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+
+<dom-module id="ref-cite">
+  <template>
+    <style>
+       :host {
+        display: inline;
+      }
+
+      a {
+        vertical-align: super;
+        font-size: smaller;
+        text-decoration-line: none;
+        background-origin: padding-box;
+        background-position-x: 0%;
+        background-position-y: 0%;
+      }
+    </style>
+    <span>
+      <a on-click="handleClick" href="#ref[[_num]]" id="cite[[_num]]">[{{_num}}]</a>
+    </span>
+    <paper-dialog id="dia_[[_num]]">
+      <h2>Edit</h2>
+      <paper-input  label="first" value="[[first]]"></paper-input>
+      <paper-input  label="last" value="[[last]]"></paper-input>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm autofocus>Accept</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+  <script>
+
+     __citation_counter = (typeof __citation_counter === 'undefined') ? 0 : __citation_counter;
+     _ref_list = (typeof _ref_list === 'undefined') ? [] : _ref_list;
+
+    /**
+     * `ref-cite`
+     * inline citation - requires <ref-list> element to display list
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class refCite extends Polymer.Element {
+
+      static get is(){return 'ref-cite';}
+      
+      static get properties() {
+        return { _num: Number,          
+                  ref: Object,
+                  accessDate:  String,
+                  archiveDate: String,            
+                  archiveUrl: String,
+                  at:  String,           
+                  database: String,
+                  doi: String,          
+                  first:  String,            
+                  first2: String,                  
+                  first3: String,          
+                  isbn: String,           
+                  issn:  String,        
+                  issue: String,           
+                  journal: String,            
+                  last: String,           
+                  last2:String,           
+                  last3: String,
+                  page:  String,           
+                  pages: String,            
+                  publisher: String,            
+                  sourceDate:String,           
+                  publicationPlace: String,            
+                  quote: String,        
+                  title: String,
+                  refType: String,            
+                  url: String,        
+                  volume: String,            
+                  website: String,
+                  year:  String           
+        };
+      }
+
+      //Called when the element is created, but before property values are set and local DOM is initialized.
+      constructor() {
+        super();        
+
+        this._num=this.computeCount();
+        console.log(`${this.tagName}${this._num} ctor `);      
+        this.accessDate="";
+        this.archiveDate="";
+        this.archiveUrl="";
+        this.at="";
+        this.database="";
+        this.doi="";
+        this.first="";
+        this.first2="";
+        this.first3="";
+        this.isbn="";
+        this.issn="";
+        this.issue="";
+        this.journal="";
+        this.last="";
+        this.last2="";
+        this.last3="";
+        this.page="";
+        this.pages="";
+        this.publisher="";
+        this.publicationPlace="";
+        this.quote="";
+        this.sourceDate="";
+        this.title="";
+        this.refType="";
+        this.url="";
+        this.volume="";
+        this.website="";
+        this.year="";
+        console.log(`${this.tagName}-${this._num}  ctor done`);
+      }
+
+      //Called after the element is inserted into the document.
+      connectedCallback() {
+        super.connectedCallback();
+        console.log(`${this.tagName}-${this._num} conceted`);        
+        this.pushRef();
+
+      }
+
+      // Called after the element is removed from the document
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        console.log(`${this.tagName}-${this._num} disconceted`);        
+      }
+
+      // Called when one of the element's attributes in properties have changed.
+      // attributeChangedCallback() {
+      //   super.attributeChangedCallback();
+      //   console.log(`${this.tagName}-${this._num} attrib chanaged`);        
+      // }
+
+      handleClick() {
+
+        //$."dia_.open()
+        var dialog = "#dia_" + this._num;
+        console.log(dialog);
+
+        this.shadowRoot.querySelector(dialog).open();
+        console.log('Ow!');
+      }
+
+      ready() {
+         super.ready();
+         console.log(`${this.tagName}-${this._num} first = ${this.first}`);        
+         console.log(`${this.tagName}-${this._num} last = ${this.last}`);        
+
+      }
+
+
+
+      computeCount() {
+        __citation_counter = __citation_counter + 1;
+        return __citation_counter;
+      }
+
+      pushRef() {
+        const reference = {
+          _num: this._num,
+          accessDate: this.accessDate,
+          archiveDate: this.archiveDate,
+          archiveUrl: this.archiveUrl,
+          at: this.at,
+          database: this.database,
+          doi: this.doi,
+          first: this.first,
+          first2: this.first2,
+          first3: this.first3,
+          isbn: this.isbn,
+          issn: this.isbn,
+          issue: this.issue,
+          journal: this.journal,
+          last: this.last,
+          last2: this.last2,
+          last3: this.last3,
+          page: this.page,
+          pages: this.pages,
+          publisher: this.publisher,
+          publicationPlace: this.publicationPlace,
+          quote: this.quote,
+          sourceDate: this.sourceDate,
+          title: this.title,
+          refType: this.refType,
+          url: this.url,
+          volume: this.volume,
+          website: this.website,
+          year: this.year
+        }
+
+        _ref_list.push(reference);
+
+        console.log("pushed ref");
+        console.table(reference);
+      };
+    }
+    window.customElements.define(refCite.is, refCite);
+  </script>
+</dom-module>

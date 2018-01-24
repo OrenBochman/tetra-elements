@@ -1,0 +1,77 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="./ref-cite.html">
+<link rel="import" href="./ref-citeb.html">
+<link rel="import" href="./ref-list.html">
+
+<dom-module id="my-view1">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+
+    <div class="card">
+      <div class="circle">1</div>
+      <h1>View One</h1>
+      <p>Ut labores minimum atomorum pro. 
+        <ref-cite 
+        ref-type="book" 
+        year="2009" 
+        first="Jane" 
+        last="Hathaway" 
+        page="8" 
+        title="The Arab Lands under Ottoman Rule, 1516-1800" 
+        publisher="Pearson Education Ltd" 
+        publication-place="Tokyo" 
+        isbn="978-0-582-41899-8"
+        quote="historians of the Ottoman Empire have rejected the narrative of decline in favor of one of crisis and adaptation" >
+      </ref-cite>
+         he claims Lorem ipsum dolor sit amet.  
+         Excepteur sint occaecat cupidatam.        
+         Sed
+         <ref-cite 
+        ref-type="journal"
+        year="2004" 
+        first="Marc" 
+        last="Langston"
+        first2="James" 
+        last2="Tyler"
+        first3="James" 
+        last3="Tyler"
+        page="8" 
+        title="Linking to journal articles in an online teaching environment: The persistent link, DOI, and OpenURL" 
+        journal = "The Internet and Higher Education"
+        volume = "7"
+        issue = "1"
+        database=""
+        pages ="51-58"
+        doi="10.1016/j.iheduc.2003.11.004"
+        quote="historians of the Ottoman Empire have rejected the narrative of decline in favor of one of crisis and adaptation">
+      </ref-cite>
+      Laudem tibique ut has.<ref-citeb ref='{ "refType":"book", 
+      "year":"2009", 
+      "first":"Jane",
+      "last":"Hathaway", 
+      "page":"8",
+      "title":"The Arab Lands under Ottoman Rule, 1516-1800", 
+      "publisher":"Pearson Education Ltd",      
+      "publicationPlace":"Tokyo", 
+      "isbn":"978-0-582-41899-8",  
+      "quote":"historians of the Ottoman Empire have rejected the narrative of decline in favor of one of crisis and adaptation"}' ></ref-citeb>
+      
+      </p>
+
+    </div>
+    <ref-list></ref-list>
+  </template>
+
+  <script>
+    class MyView1 extends Polymer.Element {
+      static get is() { return 'my-view1'; }
+    }
+
+    window.customElements.define(MyView1.is, MyView1);
+  </script>
+</dom-module>

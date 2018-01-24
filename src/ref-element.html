@@ -1,0 +1,160 @@
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<!-- import conditional template -->
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
+
+
+<dom-module id="ref-element">
+  <template>
+    <style>
+      :host {
+        display: block;
+        padding-left:0.15em;
+      }
+
+      .cite {        
+        display: flex;
+		    position: absolute;
+        margin-bottom:0px; 
+      }	    
+
+      .norm{
+        --iron-icon-width:	24px;
+        --iron-icon-height:	24px;
+      }           
+      </style>
+      <li id="ref[[_num]]" >
+          <a href="#cite[[_num]]" class="cite" >^</a>    
+          <template is="dom-if" if="[[_isBook(refType)]]">   
+          <!-- book -->
+            <iron-icon class="norm" icon="icons:language"></iron-icon>
+            [[_authors(first,last,first2,last2,first3,last3)]]
+            ([[year]]). <i> [[title]]</i>  [[publicationPlace]]:  [[publisher]] p. [[page]] <i>"[[quote]]"</i>
+          </template>
+          
+          <template is="dom-if" if="[[_isJournal(refType)]]">
+          <!-- journal -->
+            <iron-icon  class="norm" icon="icons:book"></iron-icon>
+            [[_authors(first,last,first2,last2,first3,last3)]]
+            ([[year]]). " [[title]]".  [[journal]] 
+            <template is="dom-if" if="[[_hasValue(volume)]]"><b>[[volume]]</b></template>
+            <template is="dom-if" if="[[_hasValue(issue)]]">([[issue]]):</template>
+            <template is="dom-if" if="[[_hasValue(pages)]]">[[pages]]</template>
+            <template is="dom-if" if="[[_hasValue(doi)]]"> doi: [[doi]]</template>
+          </template>      
+
+          <template is="dom-if" if="[[_isWeb(refType)]]">
+            <!-- web -->
+            <iron-icon  class="norm" icon="icons:bookmark"></iron-icon>           
+            [[_authors(first,last,first2,last2,first3,last3)]]
+            <a href src=[[url]]>[[title]]</a>. <i>[[website]]</i>. [[sourceDate]]. [[at]]. 
+            <template is="dom-if" if="[[_hasValue(publicationPlace)]]">
+              <a href src=[[publicationPlace]]>Archived</a> from the original on [[archiveDate]]
+            </template>
+            <template is="dom-if" if="[[_hasValue(accessDate)]]"> Retrieved [[accessDate]]</template>
+          </template> 
+    </li>
+    </template>
+  
+  <script>     
+       
+    /**
+     * `reference2-element`
+     * citation like in wikipedia
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class RefElement extends Polymer.Element {
+
+      static get is() { return 'ref-element'; }
+
+      static get properties() {
+        return {
+          _num: Number,          
+          ref: Object,
+          accessDate:  String,
+          archiveDate: String,            
+          archiveUrl: String,
+          at:  String,           
+          database: String,
+          doi: String,          
+          first:  String,            
+          first2: String,                  
+          first3: String,          
+          isbn: String,           
+          issn:  String,        
+          issue: String,           
+          journal: String,            
+          last: String,           
+          last2:String,           
+          last3: String,
+          page:  String,           
+          pages: String,            
+          publisher: String,            
+          sourceDate:String,           
+          publicationPlace: String,            
+          quote: String,        
+          title: String,
+          refType: String,            
+          url: String,        
+          volume: String,            
+          website: String,
+          year:  String
+        }
+      } 
+
+      constructor(){
+        super();
+        console.log(`${this.tagName}-${this._num} ctor`);          
+      }
+
+      ready(){
+        super.ready();
+        console.log(`${this.tagName}-${this._num} ready`);          
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        console.log(`${this.tagName}-${this._num} conceted`);        
+      }
+
+      _isBook(refType){
+      //  console.log(`_isBook ? ${refType}` );
+        return refType==='book';
+      }
+
+      _isWeb(refType){
+      //  console.log(`_isWeb ? ${refType}` );
+        return refType==='web';
+      }
+
+      _isJournal(refType){
+      //  console.log(`_isJournal ? ${refType}` );
+        return refType==='journal';
+      }
+
+      _hasValue(test){
+        return test.length>0;
+
+      }
+
+      _authors(first="",last="",first2="",last2="",first3="",last3=""){
+        const a1=`${last}, ${first} `;
+        const a2=`; ${last2}, ${first2} `;
+        const a3=`; ${last3}, ${first3}`;  
+        var res =  a1.length<3 ? "" : a1;
+        res += a2.length<6 ? "" : a2;
+        res += a3.length<5 ? "" : a3;
+        return res;
+    }
+
+    _accessIcon(){ return "Lock-green.svg"  }
+
+  }
+   
+    window.customElements.define(RefElement.is, RefElement);
+  </script>
+</dom-module>
