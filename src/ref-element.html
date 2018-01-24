@@ -4,56 +4,171 @@
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
 
-
 <dom-module id="ref-element">
-    <template>
-      <style>
-        :host {
-          display: block;
-          padding-left:0.15em;
-        }
-  
-        .cite {        
-          display: flex;
-          position: absolute;
-          margin-bottom:0px; 
-        }	    
-  
-        .norm{
-          --iron-icon-width:	24px;
-          --iron-icon-height:	24px;
-        }           
-        </style>
-        <li id="ref[[_num]]" > <a href="#cite[[_num]]" class="cite" >^</a> <template is="dom-if" if="[[_isBook(reftype)]]">   
-            <!-- book -->       
-              <iron-icon class="norm" icon="icons:language"></iron-icon>
-              [[_authors(first,last,first2,last2,first3,last3)]]
-              ([[year]]). <i> [[title]]</i>  [[publicationplace]]:  [[publisher]] p. [[page]] <i>"[[quote]]"</i>
-            </template>
+<template>
+  <style>
+    :host {
+      display: block;
+      padding-left:0.15em;
+    }
+
+    .year{
+      font-style: emphasis;
+      color: coral;      
+    }
+    .year::before{
+      content : "(";
+    }
+    .year::after{
+      content : ").";
+    }
+    .year:empty{
+      display:none;
+    }
+    .authors{
+      text-decoration-style: italic;
+      color: grey;
+    }
+    .title{
+      font-style: oblique;
+      color: blueviolet;
+    }
+
+    .publicationplace{
+      color: darkcyan;
+    }
+
+    .website .publisher{
+      color:cornflowerblue;    
+    }
+    .page{
+      color: crimson;
+   }
+   .page:before{
+     content: "p."
+   }
+   .pages{
+       color: crimson;
+    }
+    .pages:before{
+      content: "pp."
+    }
+    .pages:empty{display:none;}
+
+    .quote{
+      font-style: italic;
+      color: sienna
+    }
+    .quote:before{
+      content : '"';
+    }
+    .quote::after{
+      content : '".';
+    }
+    .quote:empty{display:none;}
+
+    .volume{
+      font-style: bold;
+      color: rgb(253, 95, 122);
+    }
+    .issue{
+      font-style: bold;
+      color: rgb(230, 26, 60);
+    }
+    .issue:before{
+      content : '(';
+    }
+    .issue::after{
+      content : ')';
+    }
+    .issue:empty{
+      display:none;
+    }
+    .doi{
+      font-style: oblique;
+      color: yellowgreen;
+    }
+
+    .doi:empty{
+      display:none;
+    }
+
+    .accessdate{
+      font-style: oblique;
+      color:goldenrod;
+    }  
+    .accessdate:before{
+      content : 'Retrieved on';
+    }
+    .accessdate::after{
+      content : ')';
+    }
+    .accessdate:empty{
+      display:none;
+    }
+    .archive{
+      font-style: oblique;
+      color: mediumslateblue;
+    }  
+    .archive:before{
+      content : 'Retrieved on';
+    }
+    .archive::after{
+      content : ')';
+    }
+    .archive:empty{
+      display:none;
+    }
+       
+    </style>
+    <li id="ref[[_num]]" >
+       <a href="#cite[[_num]]" >^</a>        
+       <span id="refrence#[[_num]]"> 
+          <iron-icon class="norm" icon="[[icon]]"></iron-icon>
+          <template is="dom-if" if="[[_isBook(reftype)]]">          
+            <!-- book -->            
+            <span class="authors">[[authors]]</span>
+            <span class="year">[[year]]</span>  
+            <span class="title">[[title]]</span>  
+            <span class="publicationplace">[[publicationplace]]</span>
+            <span class="publisher">[[publisher]]</span>
+            <span class="page">[[page]]</span>
+            <span class="isbn">[[isbn]]</span>
+            <span class="quote">[[quote]]</span>
+          </template>
+        
+          <template is="dom-if" if="[[_isJournal(reftype)]]">
+            <!-- journal -->          
+            <span class="authors">[[authors]]</span>
+            <span class="year">[[year]]</span>  
+            <span class="title">[[title]]</span> 
+            <span class="journal">[[journal]]</span>
+            <span class="issn">[[issn]]</span>
+            <span class="volume">[[volume]]</span>
+            <span class="issue">[[issue]]</span>
+            <span class="pages">[[pages]]</span>
+            <span class="doi"><a href src=[[doi]]>[[doi]]</a></span>
+            <span class="quote">[[quote]]</span>
             
-            <template is="dom-if" if="[[_isJournal(reftype)]]">
-            <!-- journal -->
-              <iron-icon  class="norm" icon="icons:book"></iron-icon>
-              [[_authors(first,last,first2,last2,first3,last3)]]
-              ([[year]]). " [[title]]".  [[journal]] 
-              <template is="dom-if" if="[[_hasValue(volume)]]"><b>[[volume]]</b></template>
-              <template is="dom-if" if="[[_hasValue(issue)]]">([[issue]]):</template>
-              <template is="dom-if" if="[[_hasValue(pages)]]">[[pages]]</template>
-              <template is="dom-if" if="[[_hasValue(doi)]]"> doi: [[doi]]</template>
-            </template>      
-  
-            <template is="dom-if" if="[[_isWeb(reftype)]]">
-              <!-- web -->
-              <iron-icon  class="norm" icon="icons:bookmark"></iron-icon>           
-              [[_authors(first,last,first2,last2,first3,last3)]]
-              <a href src=[[url]]>[[title]]</a>. <i>[[website]]</i>. [[sourcedate]]. [[at]]. 
-              <template is="dom-if" if="[[_hasValue(archiveurl)]]">
-                <a href src=[[archiveurl]]>Archived</a> from the original on [[archivedate]]
-              </template>
-              <template is="dom-if" if="[[_hasValue(accessdate)]]"> Retrieved [[accessdate]]</template>
-            </template> 
-      </li>
-      </template>
+          </template>      
+
+          <template is="dom-if" if="[[_isWeb(reftype)]]">
+            <!-- web -->          
+            <span class="authors">[[authors]]</span>
+            <span class="title"><a href src=[[url]]>[[title]]</a></span>                    
+            <span class="website">[[website]]</span>. 
+            <span class="sourcedate">[[sourcedate]]</span>
+            <span class="at">[[at]]</span>
+            <span class="at">[[at]]</span>
+            <span class="archive"><a href src=[[archiveurl]]>from the original on [[archivedate]]</a></span>
+            <span class="accessdate"></span>[[accessdate]]</span>
+            <span class="quote">[[quote]]</span>        
+          <template is="dom-if" if="[[_hasValue(accessdate)]]"> Retrieved [[accessdate]]</template>
+
+        </template> 
+      </span>
+  </li>
+  </template>
     
     <script>     
          
@@ -119,7 +234,10 @@
             urlaccess : {         type:String },
             volume  :{           type: String }, 
             website  :{          type: String }, 
-            year  :{             type: String }        
+            year  :{             type: String },
+            icon : {type: String, computed: "_compute_icon(reftype)" },
+            bookformat: {type: String, computed: "_book_format()" },
+            authors: {type: String, computed: "_authors(first,last,first2,last2,first3,last3)" }
   
           }
         } 
@@ -145,20 +263,110 @@
         }
   
         _authors(first="",last="",first2="",last2="",first3="",last3=""){
+          var res="";
           const a1=`${last}, ${first} `;
           const a2=`; ${last2}, ${first2} `;
           const a3=`; ${last3}, ${first3}`;  
-          var res =  a1.length<3 ? "" : a1;
-          res += a2.length<6 ? "" : a2;
-          res += a3.length<5 ? "" : a3;
+          res += a1.length<4 ? "" : a1;
+          res += a2.length<7 ? "" : a2;
+          res += a3.length<6 ? "" : a3;
           return res;
       }
   
-      _accessIcon(){ return "Lock-green.svg"  }
+       _accessIcon(){ return "Lock-green.svg"  }
   
-    }
-     
-      window.customElements.define(RefElement.is, RefElement);
+
+       _book_format(){
+        return `${this.authors} (${this.year}). <span class="title"> ${this.title} </span> ${this.publicationplace}:  ${this.publisher} p. ${this.pages}  "${this.quote}"`
+       }
+
+      // _formatWeb(){
+        
+
+      // }
+
+      // _formatJournal(){
+
+      // }
+
+      // _formatBook(){
+        
+      //   let div = document.createElement('div');
+      //   div.textContent = 'Book Book Book';
+
+      //   const insertion="refefrence"+this._num;
+      //   this.$.insertion.appendChild(div);
+
+      //   //        <iron-icon class="norm" icon="icons:language"></iron-icon>
+      //   //  [[_authors(first,last,first2,last2,first3,last3)]]
+      //   //  ([[year]]). <i> [[title]]</i>  [[publicationplace]]:  [[publisher]] p. [[page]] <i>"[[quote]]"</i>
+                
+      // }
+  
+      _compute_icon(refType){
+        console.log("_compute_icon: "+refType);
+        switch(refType){
+          case "web": return "icons:link";
+          case "book": return "icons:book";
+          case "journal": return "icons:bookmark";
+          case "map": return "maps:add-location";
+          case "podcast": return "maps:add-location";
+          case "movie": return "maps:add-location";
+          case "map": return "maps:add-location";
+          /*
+          
+          case "paper": return "icon:paper";
+          
+          case "patent": return "icon:patent";
+          case "comic": return "icon:comic";
+          case "comicstrip": return "icon:comicstrip";
+          case "court": return "icon:court";
+          case "encyclopedia": return "icon:encyclopedia";
+          */
+          default: return "icons:language";
+        }
+      }
+    }    
+    window.customElements.define(RefElement.is, RefElement);
     </script>
   </dom-module>
-  
+<!--   
+
+<dom-module id="ref-journal">
+  <script>
+    class refJournal extends RefElement {
+      static get is() { return 'ref-journal'; }
+    
+      static get properties() {
+        return {
+          ref: Object,
+          thingCount: {
+            value: 0,
+            observer: '_thingCountChanged'
+          },
+          formatters:[
+          {
+            //samples: Heilman, J. M. and West, A. G. (2015). Wikipedia and Medicine: Quantifying Readership, Editors, and the Significance of Natural Language. Journal of Medical Internet Research, 17(3), p.e62. doi:10.2196/jmir.4069.
+            name: HarvardJournal,    
+            template: `${this.authors} (${this.year}) ${this.title}. <i>${this.journal},</i> ${this.volume} (${this.issue}) p.${this.pages} ${this.doi}`
+          },
+          {
+            //samples
+            //[1] Leurs R, Church MK, Taglialatela M. H1-antihistamines: inverse agonism, anti-inflammatory actions and cardiac effects. 
+            //Clin Exp Allergy. 2002 Apr;32(4):489-498.
+            //[2] Tashiro J, Yamaguchi S, Ishii T, Suzuki A, Kondo H, Morita Y, Hara K, Koyama I. Inferior oncological prognosis of surgery without oral chemotherapy for stage III colon cancer in clinical settings. World J Surg Oncol. 2014 May 10;12(1):145. [Epub ahead of print]
+            name: VanouverJournal, 
+            template: `${this.authors} ${this.title}. ${this.journal}. ${this.date}; ${this.volume} (${this.issue}):${this.pages}. <a href src="${this.doi}">${this.doi}</a>`
+          }
+
+        ]
+        }
+      }
+      _thingCountChanged() {
+        console.log(`thing count is ${this.thingCount}`);
+      }
+    };
+    
+    customElements.define(ExtendedElement.is, ExtendedElement);
+  </script>
+</dom-module> -->
